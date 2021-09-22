@@ -1,5 +1,5 @@
 # misc
-miscellaneous collections of my personal programs, various languages
+Miscellaneous collections of my personal programs, various languages
 
 Hey! 
 This repository is a collection of various random programs which I have made.
