@@ -1,9 +1,6 @@
 # GPA Calculator for NYP
 # For Python 3.9
 # Created on: Sunday, 15 August 2021
-# Copyright (c) 2021 Ashlee Tan, qns: ash@meowbie.com
-
-# TODO: Add error handling, and maybe convert numgrd(s) to dict or fill up numgrd, and save to txt/csv automatically
 
 d = {}
 
