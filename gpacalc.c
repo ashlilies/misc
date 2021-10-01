@@ -40,8 +40,10 @@ const char *GRADESTR_ARRAY[] = {GRADESTR_DIST, GRADESTR_A, GRADESTR_BPLUS,
  */
 const int MIN_SUBJECT = 1;
 const int MAX_SUBJECT = 20;
-const int MAX_SUBJECT_NAME_LENGTH = 14;
-const int MAX_ALPHA_GRADE_LENGTH = 5;
+const int ACCEPT_NUMERIC = 0;  /* also accept number in place of alphabet? */
+const float MAX_CUSTOM_GPA = 5.0;  /* if a numerical grade is entered */
+#define   MAX_SUBJECT_NAME_LENGTH   14   /* no variable-length arrays */
+#define   MAX_ALPHA_GRADE_LENGTH    5      /* in C89 */
 
 /*
  * What comes after here isn't meant to be user-edited!
@@ -91,7 +93,7 @@ main(void)
 	/* Allocate memory for subject array */
 	asub = malloc(sizeof(SUBJECT *) * nsub);
 	if (!asub) {
-		printf("Error allocating memory for %d subjects", nsub);
+		printf("Error allocating memory for %d subjects\n", nsub);
 		return(EXIT_FAILURE);
 	}
 
@@ -104,6 +106,11 @@ main(void)
 		float ngrade;
 
 		newsub = malloc(sizeof(SUBJECT));
+		if (!newsub) {
+			printf("Error allocating memory for subject %d\n",
+			       i+1);
+			return(EXIT_FAILURE);
+		}
 
 		printf("Friendly Name (subject %d): ", i+1);
 		fgets(subname, sizeof(subname), stdin);
@@ -138,13 +145,18 @@ main(void)
 			printf("Invalid grade entered!\n");
 			return(EXIT_FAILURE);
 		}
+		if (ngrade > MAX_CUSTOM_GPA+0.001) { /* precision errors? */
+			printf("Invalid grade entered!\n");
+			return(EXIT_FAILURE);
+		}   /* numgrd(s) doesn't accept negative as numerical */
 		newsub->grade = ngrade;
 
 		printf("Credits (hours per week) (subject %d): ", i+1);
 		len = scanf("%f", &(newsub->credit));
 		getchar();  /* flush newline '\n'; scanf only */
 		if (!len || newsub->credit < 0) {
-			printf("Need to enter valid number of credits!\n");
+			printf("You need to enter a valid "
+			       "number of credits!\n");
 			return(EXIT_FAILURE);
 		}
 		
@@ -172,14 +184,16 @@ main(void)
 	printf("----------------------------------------\n");
 	
 	for (i = 0; i < nsub; i++)
-		printf("|%-14s|%-9.1f  |%-9.1f  |\n",
+		printf("|%-14s|    %-5.1f  |     %-6.0f|\n",
 		       asub[i]->name, asub[i]->grade, asub[i]->credit);
 
 	printf("----------------------------------------\n");
 	printf("Overall GPA is: %1.3f\n", gpa);
 
-	/* TODO: Free memory */
-	/* TODO */
+	/* Routine to free memory */
+	for (i = 0; i < nsub; i++)
+		free(asub[i]);
+	free(asub);
 
 	return(EXIT_SUCCESS);
 }
@@ -188,7 +202,8 @@ main(void)
 /*
  * Translates an alphabetical grade into a numerical grade.
  * If a number is supplied, it is returned as a float.
- * Else if not found, returns -1. Minimum valid value is 0.
+ * Else if not found, returns -1 = (int) NUMGRD_ERR.
+ * Minimum valid value is 0.
  */
 float
 numgrade(char *s)
@@ -196,6 +211,34 @@ numgrade(char *s)
 	int i;
 	int found;
 	char *temp;
+
+	int isnum;
+	int isdec;
+	int buf;
+
+	/* Handle the case of numerical input */
+	if (ACCEPT_NUMERIC) {
+		temp = s;
+		isnum = 0;
+		isdec = 0;
+		buf = MAX_ALPHA_GRADE_LENGTH+2;  /* buffer overflow detection */
+		for (; *temp && --buf > 0; ++temp)
+			if (*temp >= '0' && *temp <= '9')
+				isnum = 1;
+			else if (*temp == '.' && !isdec) {
+				isnum = 1;
+				isdec = 1;
+			} else {
+				isnum = 0;
+				break;
+			}
+		if (!buf) {  /* should never reach here in normal use */
+			printf("buffer overflow in numgrade()\n");
+			return(i_NUMGRD_ERR);
+		}
+		if (isnum)
+			return((float) atof(s));
+	}
 
 	/* Converts whatever is in s to uppercase before processing. */
 	temp = s;
