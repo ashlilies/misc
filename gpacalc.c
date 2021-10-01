@@ -58,7 +58,6 @@ typedef struct subject {
 
 /* Function prototypes */
 float numgrade(char *);
-void freemem(int, SUBJECT **);
 
 /* Defines and constants*/
 #define   i_NUMGRD_ERR   -1.1  /* internal use; .1 for type-casting to int */
@@ -112,7 +111,13 @@ main(void)
 		if (!newsub) {
 			printf("Error allocating memory for subject %d\n",
 			       i+1);
-			freemem(i, asub);
+
+			/* Routine to free memory; current one not yet in */
+			for (; i > 0; i--)
+				free(asub[i-1]);
+			free(asub);
+			free(newsub);
+
 			return(EXIT_FAILURE);
 		}
 
@@ -122,12 +127,24 @@ main(void)
 		len = strnlen(subname, MAX_SUBJECT_NAME_LENGTH+1);
 		if (len < 1) {
 			printf("You need to enter a subject name!\n");
-			freemem(i+1, asub);
+
+			/* Routine to free memory; current one not yet in */
+			for (; i > 0; i--)
+				free(asub[i-1]);
+			free(asub);
+			free(newsub);
+
 			return(EXIT_FAILURE);
 		}
 		if (len > MAX_SUBJECT_NAME_LENGTH) {
 			printf("Subject name is too long!\n");
-			freemem(i+1, asub);
+
+			/* Routine to free memory; current one not yet in */
+			for (; i > 0; i--)
+				free(asub[i-1]);
+			free(asub);
+			free(newsub);
+
 			return(EXIT_FAILURE);
 		}
 		strcpy(newsub->name, subname);
@@ -138,12 +155,24 @@ main(void)
 		len = strnlen(alphagrade, MAX_ALPHA_GRADE_LENGTH+1);
 		if (len < 1) {
 			printf("You need to enter an alphabetical grade!\n");
-			freemem(i+1, asub);
+
+			/* Routine to free memory; current one not yet in */
+			for (; i > 0; i--)
+				free(asub[i-1]);
+			free(asub);
+			free(newsub);
+
 			return(EXIT_FAILURE);
 		}
 		if (len > MAX_ALPHA_GRADE_LENGTH) {
 			printf("Alphabetical grade entered is too long!\n");
-			freemem(i+1, asub);
+
+			/* Routine to free memory; current one not yet in */
+			for (; i > 0; i--)
+				free(asub[i-1]);
+			free(asub);
+			free(newsub);
+
 			return(EXIT_FAILURE);
 		}
 
@@ -151,12 +180,24 @@ main(void)
 		ngrade = numgrade(alphagrade);
 		if ((int) ngrade == NUMGRD_ERR) {
 			printf("Invalid grade entered!\n");
-			freemem(i+1, asub);
+
+			/* Routine to free memory; current one not yet in */
+			for (; i > 0; i--)
+				free(asub[i-1]);
+			free(asub);
+			free(newsub);
+
 			return(EXIT_FAILURE);
 		}
 		if (ngrade > MAX_CUSTOM_GPA+0.001) { /* precision errors? */
 			printf("Invalid grade entered!\n");
-			freemem(i+1, asub);
+
+			/* Routine to free memory; current one not yet in */
+			for (; i > 0; i--)
+				free(asub[i-1]);
+			free(asub);
+			free(newsub);
+
 			return(EXIT_FAILURE);
 		}   /* numgrd(s) doesn't accept negative as numerical */
 		newsub->grade = ngrade;
@@ -167,7 +208,13 @@ main(void)
 		if (!len || newsub->credit < 0) {
 			printf("You need to enter a valid "
 			       "number of credits!\n");
-			freemem(i+1, asub);
+
+			/* Routine to free memory; current one not yet in */
+			for (; i > 0; i--)
+				free(asub[i-1]);
+			free(asub);
+			free(newsub);
+
 			return(EXIT_FAILURE);
 		}
 		
@@ -201,7 +248,11 @@ main(void)
 	printf("----------------------------------------\n");
 	printf("Overall GPA is: %1.3f\n", gpa);
 
-	freemem(nsub, asub);
+	/* Routine to free memory */
+	for (i = 0; i < nsub; i++)
+		free(asub[i]);
+	free(asub);
+
 	return(EXIT_SUCCESS);
 }
 
@@ -268,17 +319,4 @@ numgrade(char *s)
 		return(GRADE_ARRAY[i]);
 	else
 		return(i_NUMGRD_ERR);
-}
-
-/*
- * Routine to free memory.
- */
-void
-freemem(int nsub, SUBJECT **asub)
-{
-	int i;
-
-	for (i = 0; i < nsub; i++)
-		free(asub[i]);
-	free(asub);
 }
