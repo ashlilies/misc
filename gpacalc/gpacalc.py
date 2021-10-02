@@ -5,7 +5,9 @@
 d = {}
 
 def numgrd(s):
-    if s == "A":
+    if s == "DIST":
+        return 4.0
+    elif s == "A":
         return 4.0
     elif s == "B+":
         return 3.5
@@ -15,7 +17,12 @@ def numgrd(s):
         return 2.5
     elif s == "C":
         return 2.0
-    # TODO: add more grades, but this is all I got
+    elif s == "D+":
+        return 1.5
+    elif s == "D":
+        return 1.0
+    elif s == "F":
+        return 0.0
     else:
         raise Exception
 
