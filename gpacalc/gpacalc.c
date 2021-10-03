@@ -128,12 +128,10 @@ DIE:
 		len = strnlen(subname, MAX_SUBJECT_NAME_LENGTH+1);
 		if (len < 1) {
 			printf("You need to enter a subject name!\n");
-
 			goto DIE;
 		}
 		if (len > MAX_SUBJECT_NAME_LENGTH) {
 			printf("Subject name is too long!\n");
-
 			goto DIE;
 		}
 		strcpy(newsub->name, subname);
@@ -144,12 +142,10 @@ DIE:
 		len = strnlen(alphagrade, MAX_ALPHA_GRADE_LENGTH+1);
 		if (len < 1) {
 			printf("You need to enter an alphabetical grade!\n");
-
 			goto DIE;
 		}
 		if (len > MAX_ALPHA_GRADE_LENGTH) {
 			printf("Alphabetical grade entered is too long!\n");
-
 			goto DIE;
 		}
 
@@ -157,12 +153,10 @@ DIE:
 		ngrade = numgrade(alphagrade);
 		if ((int) ngrade == NUMGRD_ERR) {
 			printf("Invalid grade entered!\n");
-
 			goto DIE;
 		}
 		if (ngrade > MAX_CUSTOM_GPA+0.001) { /* precision errors? */
 			printf("Invalid grade entered!\n");
-
 			goto DIE;
 		}   /* numgrd(s) doesn't accept negative as numerical */
 		newsub->grade = ngrade;
@@ -173,7 +167,6 @@ DIE:
 		if (!len || newsub->credit < 0) {
 			printf("You need to enter a valid "
 			       "number of credits!\n");
-
 			goto DIE;
 		}
 		
