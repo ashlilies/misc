@@ -112,6 +112,7 @@ main(void)
 			printf("Error allocating memory for subject %d\n",
 			       i+1);
 
+DIE:
 			/* Routine to free memory; current one not yet in */
 			for (; i > 0; i--)
 				free(asub[i-1]);
@@ -128,24 +129,12 @@ main(void)
 		if (len < 1) {
 			printf("You need to enter a subject name!\n");
 
-			/* Routine to free memory; current one not yet in */
-			for (; i > 0; i--)
-				free(asub[i-1]);
-			free(asub);
-			free(newsub);
-
-			return(EXIT_FAILURE);
+			goto DIE;
 		}
 		if (len > MAX_SUBJECT_NAME_LENGTH) {
 			printf("Subject name is too long!\n");
 
-			/* Routine to free memory; current one not yet in */
-			for (; i > 0; i--)
-				free(asub[i-1]);
-			free(asub);
-			free(newsub);
-
-			return(EXIT_FAILURE);
+			goto DIE;
 		}
 		strcpy(newsub->name, subname);
 
@@ -156,24 +145,12 @@ main(void)
 		if (len < 1) {
 			printf("You need to enter an alphabetical grade!\n");
 
-			/* Routine to free memory; current one not yet in */
-			for (; i > 0; i--)
-				free(asub[i-1]);
-			free(asub);
-			free(newsub);
-
-			return(EXIT_FAILURE);
+			goto DIE;
 		}
 		if (len > MAX_ALPHA_GRADE_LENGTH) {
 			printf("Alphabetical grade entered is too long!\n");
 
-			/* Routine to free memory; current one not yet in */
-			for (; i > 0; i--)
-				free(asub[i-1]);
-			free(asub);
-			free(newsub);
-
-			return(EXIT_FAILURE);
+			goto DIE;
 		}
 
 		/* Call numgrade() and set struct properties accordingly */
@@ -181,24 +158,12 @@ main(void)
 		if ((int) ngrade == NUMGRD_ERR) {
 			printf("Invalid grade entered!\n");
 
-			/* Routine to free memory; current one not yet in */
-			for (; i > 0; i--)
-				free(asub[i-1]);
-			free(asub);
-			free(newsub);
-
-			return(EXIT_FAILURE);
+			goto DIE;
 		}
 		if (ngrade > MAX_CUSTOM_GPA+0.001) { /* precision errors? */
 			printf("Invalid grade entered!\n");
 
-			/* Routine to free memory; current one not yet in */
-			for (; i > 0; i--)
-				free(asub[i-1]);
-			free(asub);
-			free(newsub);
-
-			return(EXIT_FAILURE);
+			goto DIE;
 		}   /* numgrd(s) doesn't accept negative as numerical */
 		newsub->grade = ngrade;
 
@@ -209,13 +174,7 @@ main(void)
 			printf("You need to enter a valid "
 			       "number of credits!\n");
 
-			/* Routine to free memory; current one not yet in */
-			for (; i > 0; i--)
-				free(asub[i-1]);
-			free(asub);
-			free(newsub);
-
-			return(EXIT_FAILURE);
+			goto DIE;
 		}
 		
 		asub[i] = newsub;
