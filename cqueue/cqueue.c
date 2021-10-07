@@ -69,4 +69,3 @@ deq(void)
 	free(temp);
 	return(val);
 }
-/* TODO */
