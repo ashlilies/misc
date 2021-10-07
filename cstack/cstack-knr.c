@@ -21,8 +21,10 @@ push(a)  /* return 0 on success, 1 on failure */
 	if (!ssz) { /* not yet initialized; first call */
 		ssz = sizeof(TYPE);
 		stack = (TYPE *) malloc(ssz);
-		if (!stack)
+		if (!stack) {
+			ssz = 0;    /* undo */
 			return(1);  /* not enough memory */
+		}
 	}
 
 	if ((pos+1) * sizeof(TYPE) > ssz) { /* need more space */
