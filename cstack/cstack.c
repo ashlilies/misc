@@ -1,5 +1,5 @@
 /* 
- * An implementation of a dynamic FIFO stack in C89.
+ * An implementation of a dynamic LIFO stack in C89.
  * Functions included: push(a), pop().
  * Set type accordingly.
  * Copyright (C) 2021, Ashlee Tan. Licensed as attached.
