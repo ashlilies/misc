@@ -63,6 +63,7 @@ pop(void)  /* returns popped value or 0 if not found/error */
 		temp = realloc(stack, ssz -= sizeof(TYPE));
 		if (!temp) { /* an error occured */
 			ssz += sizeof(TYPE); /* undo */
+			++pos;
 			return(0);
 		}
 	}
