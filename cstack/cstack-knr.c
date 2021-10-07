@@ -1,5 +1,5 @@
 /* 
- * An implementation of a dynamic FIFO stack in C89.
+ * An implementation of a dynamic FIFO stack in K&R C.
  * Functions included: push(a), pop().
  * Set type accordingly.
  * Copyright (C) 2021, Ashlee Tan. Licensed as attached.
@@ -9,28 +9,24 @@
 
 #include <stdlib.h>    /* used by malloc() and friends */
 
-/* Function prototypes */
-int  push(TYPE);
-TYPE pop(void);
-
 static TYPE *stack;    /* pointer to first element in stack */
 static int  pos;       /* next avail position of top of stack; indexed */
 static int  ssz;       /* current size of stack */
 
-int
-push(TYPE a)  /* return 0 on success, 1 on failure */
+push(a)  /* return 0 on success, 1 on failure */
+	TYPE a;
 {
 	TYPE *temp;  /* checking realloc failures */
 
 	if (!ssz) { /* not yet initialized; first call */
 		ssz = sizeof(TYPE);
-		stack = malloc(ssz);
+		stack = (TYPE *) malloc(ssz);
 		if (!stack)
 			return(1);  /* not enough memory */
 	}
 
 	if ((pos+1) * sizeof(TYPE) > ssz) { /* need more space */
-		temp = realloc(stack, ssz += sizeof(TYPE));
+		temp = (TYPE *) realloc(stack, ssz += sizeof(TYPE));
 		if (!temp) {
 			ssz -= sizeof(TYPE);  /* undo */
 			return(1);  /* not enough memory */
@@ -43,7 +39,7 @@ push(TYPE a)  /* return 0 on success, 1 on failure */
 }
 
 TYPE
-pop(void)  /* returns popped value or 0 if not found/error */
+pop()  /* returns popped value or 0 if not found/error */
 {
 	TYPE val;
 	TYPE *temp;  /* realloc error checking */
@@ -58,7 +54,7 @@ pop(void)  /* returns popped value or 0 if not found/error */
 
 	val = stack[--pos];  /* get last stored val off stack */
 	if (ssz-sizeof(TYPE) >= sizeof(TYPE)) { /* make stack smaller */
-		temp = realloc(stack, ssz -= sizeof(TYPE));
+		temp = (TYPE *) realloc(stack, ssz -= sizeof(TYPE));
 		if (!temp) { /* an error occured */
 			ssz += sizeof(TYPE); /* undo */
 			return(0);
