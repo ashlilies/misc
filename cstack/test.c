@@ -35,7 +35,8 @@ main()
 		case '9':
 			n = atoi(temp);
 			printf("pushing %d\n", n);
-			push(n);
+			if (push(n))
+				printf("error pushing %d\n", n);
 			n = 0;   /* reset for next round */
 			break;
 		case 'q':
