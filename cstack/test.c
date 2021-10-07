@@ -1,17 +1,16 @@
 /*
- * Test driver for cstack (K&R).
+ * Test driver for cstack, in C89.
  * Copyright (C) 2021, Ashlee Tan. Licensed as attached.
  */
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include "cstack.c"
 
-main()
+int
+main(void)
 {
 	int  n;      /* value to be pushed */
-	int  count;
 	char *temp;  /* temporary input holding */
 
 	temp = malloc(sizeof(char) * 30); /* input buffer, size 30 */
@@ -41,7 +40,7 @@ main()
 			break;
 		case 'q':
 			printf("exiting\n");
-			exit(0);
+			goto exit;
 		case 'p':  /* pop */
 			printf("popped %d\n", pop());
 			break;
@@ -57,4 +56,6 @@ main()
 			break;
 		}
 	}
+exit:
+	return(0);
 }
