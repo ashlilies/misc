@@ -8,6 +8,8 @@
 
 #define   TYPE   int
 
+#include <stdlib.h>
+
 /* Function prototypes */
 int  enq(TYPE);
 TYPE deq(void);
@@ -17,7 +19,7 @@ typedef struct elem {
 	struct elem *next;
 } ELEM;
 
-ELEM *pq;  /* pointer to first element in queue */
+static ELEM *pq;  /* pointer to first element in queue */
 
 /*
  * Enqueues item a. Create a new queue if it doesn't exist.
@@ -25,7 +27,28 @@ ELEM *pq;  /* pointer to first element in queue */
  */
 int
 enq(TYPE a)
-{}
+{
+	ELEM *newelem;
+
+	/* Construct new element */
+	newelem = malloc(sizeof(ELEM));
+	if (!newelem)
+		return(1);  /* malloc failure */
+	newelem->content = a;
+	newelem->next = NULL;
+
+	if (!pq)  /* queue not yet exist */
+		pq = newelem;
+	else {
+		ELEM *temp;
+
+		temp = pq;
+		while (temp->next) /* advance to end */
+			temp = temp->next;
+		temp->next = newelem;
+	}
+	return(0);
+}
 
 /*
  * Dequeues first element from queue.
@@ -34,5 +57,16 @@ enq(TYPE a)
  */
 TYPE
 deq(void)
-{}
+{
+	ELEM *temp;
+	TYPE val;
+
+	if (!pq)  /* queue is blank */
+		return(0);
+	temp = pq;
+	pq = pq->next;
+	val = temp->content;
+	free(temp);
+	return(val);
+}
 /* TODO */
