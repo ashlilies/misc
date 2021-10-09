@@ -27,15 +27,32 @@ def numgrd(s):
         raise Exception
 
 print("Welcome to NYP GPA Calculator by Ashlee!")
-n = int(input("Please enter the number of graded subjects: "))
+while 1:
+    try:
+        n = int(input("Please enter the number of graded subjects: "))
+        break
+    except Exception:
+        print("Invalid input! Please try again?")
+
 for i in range(n):
     name = input("Friendly Name (sub %d): " % (i+1))
-    grade = input("Alphabetical Grade (sub %d): " % (i+1)).upper()
-    credit = int(input("Credits (Hours per Week) (sub %d): " % (i+1)))
-    d[name] = {"grade": grade, "credit": credit}
+    while 1:
+        try:
+            grade = input("Alphabetical Grade (sub %d): " % (i+1)).upper()
+            ngrade = float(numgrd(grade))
+            break
+        except Exception:
+            print("Invalid input! Please try again?")
+    while 1:
+        try:
+            credit = int(input("Credits (Hours per Week) (sub %d): " % (i+1)))
+            break
+        except Exception:
+            print("Invalid input! Please try again?")
+    d[name] = {"ngrade": ngrade, "credit": credit}
 
-for k in d:
-    d[k]["ngrade"] = float(numgrd(d[k]["grade"]))
+# for k in d:
+#     d[k]["ngrade"] = float(numgrd(d[k]["grade"]))
 
 creds = egps = 0
 for k in d:
@@ -45,10 +62,15 @@ for k in d:
 gpa = egps/creds
 
 print("=" * 14 + " YOUR GRADES " + "=" * 15)
-print("|| %s | %s | %s ||" % ("NAME".center(12), "GRADE".center(9), "HOURS".center(9)))
+print("|| %s | %s | %s ||"
+      % ("NAME".center(12), "GRADE".center(9), "HOURS".center(9)))
 print("|| " + "." * 36 + " ||")
 for k in d:
-    print("|| %s | %s | %s ||" % (k.center(12), str(str(d[k]["grade"]).center(2) + " (" + str(d[k]["ngrade"]) + ")").center(9), str(d[k]["credit"]).center(9)))
+    print("|| %s | %s | %s ||"
+          % (k.center(12),
+             str(str(d[k]["grade"]).center(2)
+             + " (" + str(d[k]["ngrade"]) + ")").center(9),
+             str(d[k]["credit"]).center(9)))
 print("=" * 42)
 
 print("-" * 12 + " YOUR OVERALL GPA " + "-" * 12)
