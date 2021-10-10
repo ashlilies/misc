@@ -8,3 +8,6 @@ class ListNode:
     def __str__(self):
         return(self.data)
 
+    def connect_aft(self, prev):
+        prev.next = self
+
