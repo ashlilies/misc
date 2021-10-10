@@ -1,1 +1,1 @@
-Most of the files here require Python 3.8 or a later version.
+Most of the files here require Python 3.8 or a later version, due to the use of the walrus operator (:=)
