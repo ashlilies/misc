@@ -11,8 +11,8 @@ class Stack:
 
     def pop(self):
         if (self.__listptr-1 >= 0):
-            temp = self.__data[self.__listptr-1]
             self.__listptr -= 1
+            temp = self.__data[self.__listptr]
             del self.__data[self.__listptr]
             return(temp)
         else:
