@@ -1,29 +1,28 @@
 # test stack.py
 
-from stack import Stack
+from queue import Queue
 
 # constants used by handle_cmd
 CMD_NUM  = 0
 CMD_QUIT = 1
 CMD_FAIL = 2
-CMD_POP  = 3
+CMD_DEQ  = 3
 CMD_HELP = 4
-CMD_PEEK = 5
 
 def handle_cmd(cmd: str):
     if cmd.isdecimal():
         return(CMD_NUM)
     if cmd == 'q':
         return(CMD_QUIT)
-    if cmd == 'p':
-        return(CMD_POP)
-    if cmd == 'P':
-        return(CMD_PEEK)
+    if cmd == 'd':
+        return(CMD_DEQ)
+#    if cmd == 'P':
+#        return(CMD_PEEK)
     if cmd == '?':
         return(CMD_HELP)
     return(CMD_FAIL)
 
-st = Stack()  # create empty stack
+q = Queue()  # create empty queue
 
 print("(Type ? for help)")
 while 1:
@@ -35,17 +34,14 @@ while 1:
     if (cmdresult == CMD_FAIL):
         print("Unknown command %s" % command)
     if (cmdresult == CMD_HELP):
-        print("Enter a number to push, or enter a command.")
+        print("Enter a number to enqueue, or enter a command.")
         print("Valid commands: \n"
               "\tq - Quit\n"
-              "\tp - Pop last item off stack\n"
-              "\tP - Peek at last item")
+              "\td - Dequeue")
     if (cmdresult == CMD_NUM):
-        print("pushing %s" % command)
-        st.push(command)
-    if (cmdresult == CMD_POP):
-        print("popped %s" % st.pop())
-    if (cmdresult == CMD_PEEK):
-        print("peeking %s" % st.peek())
+        print("enqueueing %s" % command)
+        q.enq(command)
+    if (cmdresult == CMD_DEQ):
+        print("dequeued %s" % q.deq())
 
-del st
+del q
